@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>建立帳號</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#0f1220;
+    color:white;
+    font-family:Arial;
+    height:100vh;
+}
+
+.container{
+    display:flex;
+    height:100vh;
+}
+
+/* 左邊 */
+
+.left{
+    width:380px;
+    background:#1b1f36;
+    padding:40px;
+    box-sizing:border-box;
+}
+
+.title{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:30px;
+}
+
+.group{
+    margin-bottom:20px;
+}
+
+.group div{
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#242846;
+    color:white;
+    box-sizing:border-box;
+    font-size:16px;
+}
+
+.create-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#4f7cff;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.create-btn:hover{
+    background:#6b8dff;
+}
+
+.message{
+    margin-top:20px;
+    text-align:center;
+    color:#66ff99;
+}
+
+/* 右邊 */
+
+.right{
+    flex:1;
+    padding:40px;
+    box-sizing:border-box;
+}
+
+.search-box{
+    margin-bottom:25px;
+}
+
+.search-title{
+    margin-bottom:10px;
+    font-size:18px;
+}
+
+.account-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.account-card{
+    background:#1b1f36;
+    border-radius:16px;
+    padding:20px;
+}
+
+.nickname{
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+.info{
+    color:#cccccc;
+    margin-bottom:8px;
+}
+
+.btn-row{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+}
+
+.edit-btn{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:#4f7cff;
+    color:white;
+    cursor:pointer;
+}
+
+.delete-btn{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:#ff4d4d;
+    color:white;
+    cursor:pointer;
+}
+
+.edit-btn:hover{
+    background:#6b8dff;
+}
+
+.delete-btn:hover{
+    background:#ff6666;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left">
+
+<div class="title">
+建立帳號
+</div>
+
+<div class="group">
+<div>暱稱</div>
+<input type="text" id="nickname">
+</div>
+
+<div class="group">
+<div>帳號</div>
+<input type="text" id="username">
+</div>
+
+<div class="group">
+<div>密碼</div>
+<input type="password" id="password">
+</div>
+
+<div class="group">
+<div>DC使用者名稱</div>
+<input type="text" id="dcname">
+</div>
+
+<button class="create-btn" onclick="createAccount()">
+建立帳號
+</button>
+
+<div class="message" id="message"></div>
+
+</div>
+
+<div class="right">
+
+<div class="search-box">
+
+<div class="search-title">
+🔍 搜尋帳號或暱稱
+</div>
+
+<input
+type="text"
+id="searchInput"
+placeholder="輸入帳號或暱稱">
+
+</div>
+
+<div
+class="account-list"
+id="accountList">
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+function createAccount(){
+
+    let nickname=document.getElementById("nickname").value;
+    let username=document.getElementById("username").value;
+    let password=document.getElementById("password").value;
+    let dcname=document.getElementById("dcname").value;
+
+    let account={
+        nickname:nickname,
+        username:username,
+        password:password,
+        dcname:dcname
+    };
+
+    localStorage.setItem(
+        "account_"+username,
+        JSON.stringify(account)
+    );
+
+    document.getElementById("message").innerHTML="建立成功";
+
+    showAccounts();
+
+}
+
+function openAccount(username){
+
+    localStorage.setItem(
+        "currentAccount",
+        username
+    );
+
+    location.href="account.html";
+
+}
+
+function deleteAccount(username){
+
+    localStorage.removeItem("account_"+username);
+
+    showAccounts();
+
+}
+
+function showAccounts(){
+
+    let html="";
+
+    let keyword=
+    document.getElementById("searchInput")
+    .value
+    .toLowerCase();
+
+    for(let i=0;i<localStorage.length;i++){
+
+        let key=localStorage.key(i);
+
+        if(key.startsWith("account_")){
+
+            let account=
+            JSON.parse(localStorage.getItem(key));
+
+            let nickname=
+            account.nickname.toLowerCase();
+
+            let username=
+            account.username.toLowerCase();
+
+            if(
+                nickname.includes(keyword)
+                ||
+                username.includes(keyword)
+            ){
+
+                html+=`
+
+                <div class="account-card">
+
+                    <div class="nickname">
+                        ${account.nickname}
+                    </div>
+
+                    <div class="info">
+                        帳號：${account.username}
+                    </div>
+
+                    <div class="info">
+                        DC：${account.dcname}
+                    </div>
+
+                    <div class="btn-row">
+
+                        <button
+                        class="edit-btn"
+                        onclick="openAccount('${account.username}')">
+
+                            修改
+
+                        </button>
+
+                        <button
+                        class="delete-btn"
+                        onclick="deleteAccount('${account.username}')">
+
+                            刪除
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                `;
+
+            }
+
+        }
+
+    }
+
+    document.getElementById("accountList").innerHTML=html;
+
+}
+
+document
+.getElementById("searchInput")
+.addEventListener(
+"input",
+showAccounts
+);
+
+showAccounts();
+
+</script>
+
+</body>
+</html>

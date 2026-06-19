@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>老闆登入</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0f1220;
+    font-family:Arial;
+    color:white;
+}
+
+.login-box{
+    width:350px;
+    background:#1b1f36;
+    padding:40px;
+    border-radius:20px;
+    box-sizing:border-box;
+}
+
+.title{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:40px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group div{
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#242846;
+    color:white;
+    box-sizing:border-box;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#4f7cff;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#6b8dff;
+}
+
+.error{
+    color:#ff6b6b;
+    text-align:center;
+    margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="title">
+        老闆登入
+    </div>
+
+    <div class="input-group">
+        <div>帳號</div>
+        <input type="text" id="username">
+    </div>
+
+    <div class="input-group">
+        <div>密碼</div>
+        <input type="password" id="password">
+    </div>
+
+    <button onclick="login()">
+        登入
+    </button>
+
+    <div class="error" id="error"></div>
+
+</div>
+
+<script>
+
+function login(){
+
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    let account = localStorage.getItem("account_" + username);
+
+    if(account){
+
+        account = JSON.parse(account);
+
+        if(password === account.password){
+
+            localStorage.setItem("nickname", account.nickname);
+            localStorage.setItem("dcname", account.dcname);
+            localStorage.setItem("username", account.username);
+
+            window.location.href = "index.html";
+
+        }
+        else{
+
+            document.getElementById("error").innerHTML = "帳號或密碼錯誤";
+
+        }
+
+    }
+    else{
+
+        document.getElementById("error").innerHTML = "帳號或密碼錯誤";
+
+    }
+
+}
+
+document.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter"){
+        login();
+    }
+
+});
+
+</script>
+
+</body>
+</html>

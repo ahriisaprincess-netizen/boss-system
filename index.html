@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>儲值系統</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0f1220;
+  color: white;
+  display: flex;
+}
+
+/* 左側欄 */
+.sidebar {
+  width: 280px;
+  background: #1b1f36;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 會員卡片 */
+.profile {
+  background: #242846;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #3a3f66;
+  margin: 0 auto 10px auto;
+}
+
+/* 資訊卡 */
+.info {
+  background: #242846;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* 額度框 */
+.amount-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* VIP框 */
+.vip-box {
+  background: #242846;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.vip-title {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.vip-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.next-title {
+  margin-bottom: 15px;
+}
+
+.next-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vip-progress-text {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 主畫面 */
+.main {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 公告 */
+.banner {
+  height: 140px;
+  background: #1b1f36;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #2b3155;
+  color: #ffd86b;
+  font-weight: bold;
+}
+
+/* 兩大功能區 */
+.grid {
+  display: flex;
+  gap: 15px;
+}
+
+.card {
+  flex: 1;
+  height: 320px;
+  background: #1b1f36;
+  border-radius: 14px;
+  border: 1px solid #2b3155;
+  padding: 20px;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: #4f7cff;
+}
+
+.title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #4f7cff;
+}
+
+.sub {
+  font-size: 13px;
+  color: #aaa;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- 左側 -->
+<div class="sidebar">
+
+  <div class="profile">
+    <div class="avatar"></div>
+    <div id="nickname"></div>
+  </div>
+
+  <div class="info amount-box">
+    <span>💰 額度</span>
+    <span>50000</span>
+  </div>
+
+  <!-- VIP等級 -->
+  <div class="vip-box">
+
+    <div class="vip-title">
+      🏆 VIP等級
+    </div>
+
+    <div class="vip-row">
+      <span>SVIP</span>
+      <span>抽取式衛生紙</span>
+    </div>
+
+  </div>
+
+  <!-- 下個VIP -->
+  <div class="vip-box">
+
+    <div class="next-title">
+      下個VIP等級
+    </div>
+
+    <div class="next-row">
+      <span>SSVIP</span>
+      <span>柔感衛生紙</span>
+    </div>
+
+    <div class="vip-progress-text">
+      88888 / 100000
+    </div>
+
+  </div>
+
+</div>
+
+<!-- 右側 -->
+<div class="main">
+
+  <div class="banner">
+    放活動圖片 / 儲值公告 / 輪播圖
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="title">會員介面</div>
+      <div class="sub">查看資料 / 交易紀錄 / VIP資訊</div>
+    </div>
+
+    <div class="card">
+      <div class="title">儲值介面</div>
+      <div class="sub">儲值活動 / 儲值紀錄 / 點單扣款</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+document.getElementById("nickname").innerHTML =
+localStorage.getItem("nickname");
+
+</script>
+
+</body>
+</html>

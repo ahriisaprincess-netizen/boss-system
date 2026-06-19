@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>老闆資料</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#0f1220;
+    color:white;
+    font-family:Arial;
+    padding:30px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.card{
+    background:#1b1f36;
+    border-radius:20px;
+    padding:30px;
+    margin-bottom:25px;
+}
+
+.title{
+    font-size:24px;
+    margin-bottom:25px;
+}
+
+.info{
+    margin-bottom:18px;
+    font-size:18px;
+}
+
+.edit-box{
+    width:300px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#242846;
+    color:white;
+    font-size:16px;
+}
+
+.save-btn,
+.money-btn{
+    margin-top:20px;
+    margin-right:10px;
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    background:#4f7cff;
+    color:white;
+    cursor:pointer;
+}
+
+.save-btn:hover,
+.money-btn:hover{
+    background:#6b8dff;
+}
+
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.history-table th{
+    padding:15px;
+    border-bottom:1px solid #444;
+    text-align:center;
+}
+
+.history-table td{
+    padding:15px;
+    border-bottom:1px solid #333;
+    text-align:center;
+}
+
+.history-table tr:hover{
+    background:#242846;
+}
+
+.plus{
+    color:#66ff99;
+}
+
+.minus{
+    color:#ff6666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="title">
+基本資料
+</div>
+
+<div class="info">
+老闆：
+<input class="edit-box" id="nickname">
+</div>
+
+<div class="info">
+帳號：
+<input class="edit-box" id="username">
+</div>
+
+<div class="info">
+密碼：
+<input
+type="password"
+class="edit-box"
+id="password">
+</div>
+
+<div class="info">
+DC：
+<input
+class="edit-box"
+id="dcname">
+</div>
+
+<div class="info">
+創建帳號時間：
+<span id="createTime"></span>
+</div>
+
+<button
+class="save-btn"
+onclick="saveAccount()">
+
+確認修改
+
+</button>
+
+</div>
+<div class="card">
+
+<div class="title">
+金額資料
+</div>
+
+<div class="info">
+剩餘額度：
+<span id="balance"></span>
+</div>
+
+<div class="info">
+VIP等級：
+<span id="vip">
+SVIP 抽取式衛生紙
+</span>
+</div>
+
+<div class="info">
+累計儲值金額：
+<span id="totalRecharge"></span>
+</div>
+
+<button
+class="money-btn"
+onclick="addBalance()">
+
+增加額度
+
+</button>
+
+<button
+class="money-btn"
+onclick="minusBalance()">
+
+扣除額度
+
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="title">
+交易紀錄
+</div>
+
+<table class="history-table">
+
+<thead>
+
+<tr>
+
+<th>
+日期
+</th>
+
+<th>
+時間
+</th>
+
+<th>
+金額
+</th>
+
+<th>
+類型
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let currentUsername =
+localStorage.getItem(
+"currentAccount"
+);
+
+let account =
+JSON.parse(
+localStorage.getItem(
+"account_" + currentUsername
+)
+);
+
+if(account){
+
+    document.getElementById(
+    "nickname"
+    ).value =
+    account.nickname;
+
+    document.getElementById(
+    "username"
+    ).value =
+    account.username;
+
+    document.getElementById(
+    "password"
+    ).value =
+    account.password;
+
+    document.getElementById(
+    "dcname"
+    ).value =
+    account.dcname;
+        if(account.createTime==undefined){
+
+        let now = new Date();
+
+        let year = now.getFullYear();
+
+        let month =
+        now.getMonth()+1;
+
+        let day =
+        now.getDate();
+
+        let hour =
+        String(
+        now.getHours()
+        ).padStart(2,"0");
+
+        let minute =
+        String(
+        now.getMinutes()
+        ).padStart(2,"0");
+
+        account.createTime =
+        year + "/" +
+        month + "/" +
+        day + " " +
+        hour + ":" +
+        minute;
+
+    }
+
+    document.getElementById(
+    "createTime"
+    ).innerHTML =
+    account.createTime;
+
+    if(account.balance==undefined){
+
+        account.balance=50000;
+
+    }
+
+    if(account.totalRecharge==undefined){
+
+        account.totalRecharge=88888;
+
+    }
+
+    if(account.history==undefined){
+
+        account.history=[];
+
+    }
+
+    document.getElementById(
+    "balance"
+    ).innerHTML =
+    account.balance;
+
+    document.getElementById(
+    "totalRecharge"
+    ).innerHTML =
+    account.totalRecharge;
+
+}
+
+function saveAccount(){
+
+    account.nickname =
+    document.getElementById(
+    "nickname"
+    ).value;
+
+    account.username =
+    document.getElementById(
+    "username"
+    ).value;
+
+    account.password =
+    document.getElementById(
+    "password"
+    ).value;
+
+    account.dcname =
+    document.getElementById(
+    "dcname"
+    ).value;
+
+    localStorage.setItem(
+
+    "account_" + currentUsername,
+
+    JSON.stringify(account)
+
+    );
+
+    alert(
+    "修改成功"
+    );
+
+}
+
+function addBalance(){
+
+    let amount =
+    prompt(
+    "請輸入增加金額"
+    );
+
+    if(amount==null){
+
+        return;
+
+    }
+
+    amount =
+    Number(amount);
+
+    if(amount<=0){
+
+        alert(
+        "金額錯誤"
+        );
+
+        return;
+
+    }
+
+    account.balance += amount;
+
+    account.totalRecharge += amount;
+        let now = new Date();
+
+    let date =
+    now.getFullYear()
+    + "/"
+    + (now.getMonth()+1)
+    + "/"
+    + now.getDate();
+
+    let time =
+    String(now.getHours())
+    .padStart(2,"0")
+    + ":"
+    +
+    String(now.getMinutes())
+    .padStart(2,"0");
+
+    let record = {
+
+        date:date,
+
+        time:time,
+
+        amount:"+" + amount,
+
+        type:"儲值金"
+
+    };
+
+    account.history.unshift(
+    record
+    );
+
+    localStorage.setItem(
+
+    "account_" + currentUsername,
+
+    JSON.stringify(account)
+
+    );
+
+    document.getElementById(
+    "balance"
+    ).innerHTML =
+    account.balance;
+
+    document.getElementById(
+    "totalRecharge"
+    ).innerHTML =
+    account.totalRecharge;
+
+    showHistory();
+
+}
+
+function showHistory(){
+
+    let html="";
+
+    for(
+    let i=0;
+    i<account.history.length;
+    i++
+    ){
+
+        let record =
+        account.history[i];
+
+        html += `
+
+<tr>
+
+<td>
+${record.date}
+</td>
+
+<td>
+${record.time}
+</td>
+
+<td class="${
+record.amount.startsWith("-")
+?
+"minus"
+:
+"plus"
+}">
+${record.amount}
+</td>
+
+<td>
+${record.type}
+</td>
+
+</tr>
+
+`;
+
+    }
+
+    document.getElementById(
+    "historyBody"
+    ).innerHTML =
+    html;
+
+}
+
+showHistory();
+
+function minusBalance(){
+
+    let amount =
+    prompt(
+    "請輸入扣除金額"
+    );
+
+    if(amount==null){
+
+        return;
+
+    }
+
+    amount =
+    Number(amount);
+
+    if(amount<=0){
+
+        alert(
+        "金額錯誤"
+        );
+
+        return;
+
+    }
+
+    if(amount>account.balance){
+
+        alert(
+        "餘額不足"
+        );
+
+        return;
+
+    }
+
+    account.balance -= amount;
+
+        let now = new Date();
+
+    let date =
+    now.getFullYear()
+    + "/"
+    + (now.getMonth()+1)
+    + "/"
+    + now.getDate();
+
+    let time =
+    String(now.getHours())
+    .padStart(2,"0")
+    + ":"
+    +
+    String(now.getMinutes())
+    .padStart(2,"0");
+
+    let record = {
+
+        date:date,
+
+        time:time,
+
+        amount:"-" + amount,
+
+        type:"點單扣款"
+
+    };
+
+    account.history.unshift(
+    record
+    );
+
+    localStorage.setItem(
+
+    "account_" + currentUsername,
+
+    JSON.stringify(account)
+
+    );
+
+    document.getElementById(
+    "balance"
+    ).innerHTML =
+    account.balance;
+
+        showHistory();
+
+}
+
+</script>
+
+</body>
+</html>
