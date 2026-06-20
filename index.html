@@ -142,6 +142,40 @@ body {
   color: #aaa;
 }
 
+.logout-btn{
+
+  position:absolute;
+
+  left:20px;
+
+  bottom:20px;
+
+  width:240px;
+
+  height:50px;
+
+  background:transparent;
+
+  border:1px solid #4f7cff;
+
+  border-radius:12px;
+
+  color:white;
+
+  cursor:pointer;
+
+  font-size:15px;
+
+  transition:0.2s;
+
+}
+
+.logout-btn:hover{
+
+  background:#4f7cff;
+
+}
+
 </style>
 </head>
 
@@ -156,9 +190,9 @@ body {
   </div>
 
   <div class="info amount-box">
-    <span>💰 額度</span>
-    <span>50000</span>
-  </div>
+  <span>💰 額度</span>
+  <span id="balance"></span>
+</div>
 
   <!-- VIP等級 -->
   <div class="vip-box">
@@ -168,9 +202,9 @@ body {
     </div>
 
     <div class="vip-row">
-      <span>SVIP</span>
-      <span>抽取式衛生紙</span>
-    </div>
+  <span id="vipLevel"></span>
+  <span id="vipName"></span>
+</div>
 
   </div>
 
@@ -182,15 +216,25 @@ body {
     </div>
 
     <div class="next-row">
-      <span>SSVIP</span>
-      <span>柔感衛生紙</span>
-    </div>
+  <span id="nextVipLevel"></span>
+  <span id="nextVipName"></span>
+</div>
 
     <div class="vip-progress-text">
-      88888 / 100000
+      <div class="vip-progress-text" id="vipProgress"></div>
     </div>
 
   </div>
+
+</div>
+
+<button
+class="logout-btn"
+onclick="logout()">
+
+登出
+
+</button>
 
 </div>
 
@@ -219,10 +263,287 @@ body {
 
 <script>
 
-document.getElementById("nickname").innerHTML =
-localStorage.getItem("nickname");
+let currentUsername =
+localStorage.getItem("currentAccount");
+
+if(!currentUsername){
+    location.href = "login.html";
+}
+
+let account =
+JSON.parse(
+localStorage.getItem("account_" + currentUsername)
+);
+
+if(!account){
+    location.href = "login.html";
+}
+
+if(account==null){
+
+    location.href =
+    "login.html";
+
+}
+
+document.getElementById(
+"nickname"
+).innerHTML =
+account.nickname;
+
+document.getElementById(
+"balance"
+).innerHTML =
+account.balance;
+
+let vipLevel = "GUEST";
+
+let vipName =
+"三層抽取式衛生紙";
+
+if(account.totalRecharge>=3000){
+
+    vipLevel="VIP";
+
+    vipName=
+    "柔感衛生紙";
+
+}
+
+if(account.totalRecharge>=6000){
+
+    vipLevel="VVIP";
+
+    vipName=
+    "印花衛生紙";
+
+}
+
+if(account.totalRecharge>=10000){
+
+    vipLevel="VVVIP";
+
+    vipName=
+    "香氛衛生紙";
+
+}
+
+if(account.totalRecharge>=15000){
+
+    vipLevel="VVVVIP";
+
+    vipName=
+    "四層頂級衛生紙";
+
+}
+
+if(account.totalRecharge>=30000){
+
+    vipLevel="SVIP";
+
+    vipName=
+    "原木漿衛生紙";
+
+}
+
+if(account.totalRecharge>=50000){
+
+    vipLevel="SSVIP";
+
+    vipName=
+    "竹漿衛生紙";
+
+}
+
+if(account.totalRecharge>=88000){
+
+    vipLevel="KING";
+
+    vipName=
+    "羽美翔手工製捲筒衛生紙";
+
+}
+
+document.getElementById(
+"vipLevel"
+).innerHTML =
+vipLevel;
+
+document.getElementById(
+"vipName"
+).innerHTML =
+vipName;
+
+let nextVipLevel = "";
+let nextVipName = "";
+let nextTarget = 88000;
+
+if(account.totalRecharge < 3000){
+
+    nextVipLevel = "VIP";
+
+    nextVipName =
+    "柔感衛生紙";
+
+    nextTarget = 3000;
+
+}
+
+else if(account.totalRecharge < 6000){
+
+    nextVipLevel = "VVIP";
+
+    nextVipName =
+    "印花衛生紙";
+
+    nextTarget = 6000;
+
+}
+
+else if(account.totalRecharge < 10000){
+
+    nextVipLevel = "VVVIP";
+
+    nextVipName =
+    "香氛衛生紙";
+
+    nextTarget = 10000;
+
+}
+
+else if(account.totalRecharge < 15000){
+
+    nextVipLevel = "VVVVIP";
+
+    nextVipName =
+    "四層頂級衛生紙";
+
+    nextTarget = 15000;
+
+}
+
+else if(account.totalRecharge < 30000){
+
+    nextVipLevel = "SVIP";
+
+    nextVipName =
+    "原木漿衛生紙";
+
+    nextTarget = 30000;
+
+}
+
+else if(account.totalRecharge < 50000){
+
+    nextVipLevel = "SSVIP";
+
+    nextVipName =
+    "竹漿衛生紙";
+
+    nextTarget = 50000;
+
+}
+
+else if(account.totalRecharge < 88000){
+
+    nextVipLevel = "KING";
+
+    nextVipName =
+    "羽美翔手工製捲筒衛生紙";
+
+    nextTarget = 88000;
+
+}
+
+else{
+
+    nextVipLevel = "MAX";
+
+    nextVipName =
+    "已達最高等級";
+
+}
+
+document.getElementById(
+"nextVipLevel"
+).innerHTML =
+nextVipLevel;
+
+document.getElementById(
+"nextVipName"
+).innerHTML =
+nextVipName;
+
+if(nextVipLevel=="MAX"){
+
+document.getElementById(
+"vipProgress"
+).innerHTML =
+
+'<div style="display:flex;justify-content:space-between;">'
+
++
+
+'<span>累計儲值金額</span>'
+
++
+
+'<span>'
+
++
+
+account.totalRecharge
+
++
+
+'</span>'
+
++
+
+'</div>';
+
+}
+
+else{
+
+document.getElementById(
+"vipProgress"
+).innerHTML =
+
+account.totalRecharge
++
+" / "
++
+nextTarget;
+
+}
+
+function logout(){
+
+  localStorage.removeItem(
+  "currentAccount"
+  );
+
+  location.href =
+  "login.html";
+
+}
+
+if(
+localStorage.getItem(
+"currentAccount"
+)==null
+){
+
+  location.href =
+  "login.html";
+
+}
 
 </script>
 
 </body>
+
+<script type="module" src="firebase.js"></script>
+
 </html>

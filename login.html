@@ -118,7 +118,26 @@ function login(){
             localStorage.setItem("dcname", account.dcname);
             localStorage.setItem("username", account.username);
 
-            window.location.href = "index.html";
+            localStorage.setItem(
+
+"currentAccount",
+
+account.username
+
+);
+
+            if(account.username=="admin"){
+
+    window.location.href =
+    "admin.html";
+
+}
+else{
+
+    window.location.href =
+    "index.html";
+
+}
 
         }
         else{
@@ -147,4 +166,7 @@ document.addEventListener("keydown", function(event){
 </script>
 
 </body>
+
+<script type="module" src="firebase.js"></script>
+
 </html>
