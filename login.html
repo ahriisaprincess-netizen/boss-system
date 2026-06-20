@@ -101,6 +101,36 @@ button:hover{
 
 <script>
 
+if(localStorage.getItem("account_admin")==null){
+
+    let admin={
+
+        nickname:"管理員",
+
+        dcname:"admin",
+
+        username:"admin",
+
+        password:"123456",
+
+        balance:0,
+
+        totalRecharge:0,
+
+        history:[]
+
+    };
+
+    localStorage.setItem(
+
+        "account_admin",
+
+        JSON.stringify(admin)
+
+    );
+
+}
+
 function login(){
 
     let username = document.getElementById("username").value;
