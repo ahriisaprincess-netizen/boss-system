@@ -421,6 +421,17 @@ for(let i=0;i<localStorage.length;i++){
         JSON.stringify(account)
     );
 
+    set(
+
+ref(
+db,
+"accounts/"+username
+),
+
+account
+
+);
+
     document.getElementById("message").innerHTML="建立成功";
 
     showAccounts();
